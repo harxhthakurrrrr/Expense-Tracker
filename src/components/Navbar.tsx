@@ -59,42 +59,42 @@ const Navbar: React.FC = () => {
   return (
     <nav 
       ref={navRef}
-      className="bg-white/80 backdrop-blur-md border-b border-gray-100 py-3 px-6 sticky top-0 z-50 shadow-sm"
+      className="bg-black/80 backdrop-blur-xl border-b border-white/5 py-4 px-6 sticky top-0 z-50"
     >
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         <div 
           ref={logoRef}
           onMouseEnter={handleLogoHover}
           onMouseLeave={handleLogoLeave}
-          className="flex items-center gap-3 cursor-pointer group"
+          className="flex items-center gap-4 cursor-pointer group"
         >
           <div className="relative">
-            <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full group-hover:bg-primary/40 transition-colors"></div>
-            <div className="relative p-2.5 bg-gradient-to-br from-[#6366f1] to-[#8b5cf6] rounded-2xl shadow-lg shadow-indigo-500/30 overflow-hidden">
-              <Wallet ref={iconRef} className="text-white w-6 h-6 relative z-10" />
-              <div className="absolute -bottom-2 -right-2 w-6 h-6 bg-white/20 rounded-full blur-md"></div>
+            <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full group-hover:bg-primary/40 transition-colors"></div>
+            <div className="relative p-2.5 bg-cyber-gray rounded-xl border border-primary/30 shadow-neon">
+              <Wallet ref={iconRef} className="text-primary w-6 h-6 relative z-10" />
             </div>
           </div>
-          <h1 className="text-2xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-[#6366f1] via-[#8b5cf6] to-[#ec4899]">
-            {t('navbar.title')}<span className="text-gray-900">{t('navbar.tracker')}</span>
+          <h1 className="text-2xl font-black tracking-tighter uppercase italic">
+            <span className="text-primary">{t('navbar.title')}</span>
+            <span className="text-white ml-1">{t('navbar.tracker')}</span>
           </h1>
         </div>
         
-        <div className="flex items-center gap-2 sm:gap-6">
+        <div className="flex items-center gap-3 sm:gap-8">
           <LanguageSwitcher />
-          <div className="h-8 w-px bg-gray-100 hidden sm:block"></div>
-          <button className="p-2.5 text-gray-400 hover:text-[#6366f1] hover:bg-[#6366f1]/5 rounded-2xl transition-all">
+          <div className="h-6 w-px bg-white/10 hidden sm:block"></div>
+          <button className="p-2 text-gray-500 hover:text-primary transition-all relative">
             <Bell className="w-5 h-5" />
+            <span className="absolute top-1 right-1 w-2 h-2 bg-secondary rounded-full shadow-[0_0_8px_rgba(255,0,60,0.8)]"></span>
           </button>
-          <div className="h-8 w-px bg-gray-100 hidden sm:block"></div>
-          <div className="flex items-center gap-3">
+          <div className="h-6 w-px bg-white/10 hidden sm:block"></div>
+          <div className="flex items-center gap-4">
             <div className="hidden sm:block text-right">
-              <p className="text-sm font-black text-gray-900 leading-none">Harsh Thakur</p>
-              <p className="text-[10px] font-bold text-[#6366f1] mt-1 uppercase tracking-wider">{t('navbar.premium')}</p>
+              <p className="text-xs font-black text-white leading-none uppercase tracking-widest">Harsh Thakur</p>
+              <p className="text-[9px] font-bold text-primary mt-1 uppercase tracking-[0.2em]">{t('navbar.premium')}</p>
             </div>
             <div 
-              className="h-11 w-11 rounded-2xl bg-gradient-to-tr from-[#6366f1] to-[#8b5cf6] flex items-center justify-center text-white font-bold border-2 border-white cursor-pointer hover:scale-110 transition-transform"
-              style={{ boxShadow: '0 20px 50px -12px rgba(99, 102, 241, 0.15)' }}
+              className="h-10 w-10 rounded-xl bg-cyber-gray border border-primary/30 flex items-center justify-center text-primary font-black cursor-pointer hover:border-primary transition-all shadow-neon"
             >
               H
             </div>

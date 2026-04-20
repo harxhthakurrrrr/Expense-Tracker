@@ -66,25 +66,25 @@ const AddExpenseForm: React.FC = () => {
   };
 
   return (
-    <div ref={formRef} className="card border-none shadow-xl shadow-gray-200/50 p-8 sticky top-24">
+    <div ref={formRef} className="card border-white/5 bg-white/5 p-8 sticky top-24 shadow-neon">
       <div className="flex items-center gap-3 mb-8">
-        <div className="p-2 bg-[#6366f1]/10 text-[#6366f1] rounded-xl">
+        <div className="p-3 bg-primary text-black rounded-xl shadow-[0_0_15px_rgba(0,255,65,0.4)]">
           <PlusCircle className="w-6 h-6" />
         </div>
-        <h2 className="text-xl font-black text-gray-900 tracking-tight">{t('form.title')}</h2>
+        <h2 className="text-xl font-black text-white tracking-tighter uppercase italic">{t('form.title')}</h2>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-2 group">
-          <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1 group-focus-within:text-primary transition-colors">
-            {t('form.label_title')}
+          <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1 group-focus-within:text-primary transition-colors mono">
+            // {t('form.label_title')}
           </label>
           <div className="relative">
-            <Tag className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Tag className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-primary transition-colors" />
             <input
               type="text"
               placeholder={t('form.placeholder_title')}
-              className="input-field pl-12 bg-gray-50/50 border-transparent focus:bg-white focus:shadow-lg focus:shadow-primary/5 transition-all"
+              className="input-field pl-12"
               value={title}
               onChange={handleTitleChange}
               required
@@ -94,15 +94,15 @@ const AddExpenseForm: React.FC = () => {
 
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2 group">
-            <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1 group-focus-within:text-primary transition-colors">
-              {t('form.label_amount')}
+            <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1 group-focus-within:text-primary transition-colors mono">
+              // {t('form.label_amount')}
             </label>
             <div className="relative">
-              <IndianRupee className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <IndianRupee className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-primary transition-colors" />
               <input
                 type="number"
                 placeholder="0.00"
-                className="input-field pl-12 bg-gray-50/50 border-transparent focus:bg-white focus:shadow-lg focus:shadow-primary/5 transition-all"
+                className="input-field pl-12"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 required
@@ -112,48 +112,46 @@ const AddExpenseForm: React.FC = () => {
 
           <div className="space-y-2 group">
             <div className="flex justify-between items-center pr-1">
-              <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1 group-focus-within:text-primary transition-colors">
-                {t('form.label_category')}
+              <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1 group-focus-within:text-primary transition-colors mono">
+                // {t('form.label_category')}
               </label>
               {isAiLoading && (
-                <span className="flex items-center gap-1 text-[9px] font-black text-[#6366f1] bg-[#6366f1]/5 px-2 py-0.5 rounded-full animate-pulse">
-                  <Loader2 className="w-2 h-2 animate-spin" />
-                  AI THINKING
+                <span className="flex items-center gap-1 text-[8px] font-black text-primary bg-primary/10 px-2 py-0.5 rounded-full animate-pulse mono">
+                  THINKING...
                 </span>
               )}
               {aiSuggested && !isAiLoading && (
-                <span className="flex items-center gap-1 text-[9px] font-black text-emerald-500 bg-emerald-50 px-2 py-0.5 rounded-full">
-                  <Sparkles className="w-2 h-2" />
-                  AI PICKED
+                <span className="flex items-center gap-1 text-[8px] font-black text-black bg-primary px-2 py-0.5 rounded-full mono">
+                  AI_PICKED
                 </span>
               )}
             </div>
             <select
-              className="input-field bg-gray-50/50 border-transparent focus:bg-white focus:shadow-lg focus:shadow-primary/5 transition-all appearance-none"
+              className="input-field appearance-none cursor-pointer"
               value={category}
               onChange={(e) => setCategory(e.target.value as Category)}
               required
             >
-              <option value="">{t('form.select_category')}</option>
-              <option value="Food">{t('categories.Food')}</option>
-              <option value="Transport">{t('categories.Transport')}</option>
-              <option value="Shopping">{t('categories.Shopping')}</option>
-              <option value="Entertainment">{t('categories.Entertainment')}</option>
-              <option value="Bills">{t('categories.Bills')}</option>
-              <option value="Other">{t('categories.Other')}</option>
+              <option value="" className="bg-cyber-black">{t('form.select_category')}</option>
+              <option value="Food" className="bg-cyber-black">{t('categories.Food')}</option>
+              <option value="Transport" className="bg-cyber-black">{t('categories.Transport')}</option>
+              <option value="Shopping" className="bg-cyber-black">{t('categories.Shopping')}</option>
+              <option value="Entertainment" className="bg-cyber-black">{t('categories.Entertainment')}</option>
+              <option value="Bills" className="bg-cyber-black">{t('categories.Bills')}</option>
+              <option value="Other" className="bg-cyber-black">{t('categories.Other')}</option>
             </select>
           </div>
         </div>
 
         <div className="space-y-2 group">
-          <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1 group-focus-within:text-primary transition-colors">
-            {t('form.label_date')}
+          <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1 group-focus-within:text-primary transition-colors mono">
+            // {t('form.label_date')}
           </label>
           <div className="relative">
-            <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-primary transition-colors" />
             <input
               type="date"
-              className="input-field pl-12 bg-gray-50/50 border-transparent focus:bg-white focus:shadow-lg focus:shadow-primary/5 transition-all"
+              className="input-field pl-12 [color-scheme:dark]"
               value={date}
               onChange={(e) => setDate(e.target.value)}
             />
@@ -161,14 +159,14 @@ const AddExpenseForm: React.FC = () => {
         </div>
 
         <div className="space-y-2 group">
-          <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1 group-focus-within:text-primary transition-colors">
-            {t('form.label_note')}
+          <label className="text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] ml-1 group-focus-within:text-primary transition-colors mono">
+            // {t('form.label_note')}
           </label>
           <div className="relative">
-            <MessageSquare className="absolute left-4 top-4 w-4 h-4 text-gray-400" />
+            <MessageSquare className="absolute left-4 top-4 w-4 h-4 text-gray-500 group-focus-within:text-primary transition-colors" />
             <textarea
               placeholder={t('form.placeholder_note')}
-              className="input-field pl-12 pt-3 min-h-[100px] bg-gray-50/50 border-transparent focus:bg-white focus:shadow-lg focus:shadow-primary/5 transition-all resize-none"
+              className="input-field pl-12 pt-3 min-h-[100px] resize-none"
               value={note}
               onChange={(e) => setNote(e.target.value)}
             />
@@ -178,10 +176,11 @@ const AddExpenseForm: React.FC = () => {
         <button
           ref={buttonRef}
           type="submit"
-          className="w-full bg-gradient-to-r from-[#6366f1] to-[#8b5cf6] text-white py-4 rounded-2xl font-bold shadow-lg shadow-indigo-500/30 hover:shadow-xl hover:shadow-indigo-500/40 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 flex items-center justify-center gap-2 group"
+          className="btn-primary w-full py-4 flex items-center justify-center gap-3 group overflow-hidden relative"
         >
-          <PlusCircle className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
-          {t('form.button_save')}
+          <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+          <PlusCircle className="w-5 h-5 relative z-10 group-hover:rotate-90 transition-transform duration-500" />
+          <span className="relative z-10">{t('form.button_save')}</span>
         </button>
       </form>
     </div>

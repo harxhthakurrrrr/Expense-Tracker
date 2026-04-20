@@ -48,25 +48,25 @@ const LanguageSwitcher: React.FC = () => {
     <div className="relative" ref={dropdownRef}>
       <button 
         onClick={toggleDropdown}
-        className="flex items-center gap-2 px-3 py-2 bg-gray-50 hover:bg-gray-100 rounded-xl transition-all duration-300 border border-gray-100"
+        className="flex items-center gap-2 px-3 py-2 bg-white/5 hover:bg-white/10 rounded-xl transition-all duration-300 border border-white/5 mono"
       >
         <span className="text-lg">{currentLanguage.flag}</span>
-        <span className="text-sm font-bold text-gray-700 hidden sm:block">{currentLanguage.name}</span>
-        <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+        <span className="text-[10px] font-black text-gray-400 hidden sm:block uppercase tracking-widest">{currentLanguage.name}</span>
+        <ChevronDown className={`w-3 h-3 text-gray-500 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-40 bg-white rounded-2xl shadow-2xl border border-gray-50 overflow-hidden z-[60]">
+        <div className="absolute right-0 mt-2 w-40 bg-cyber-dark rounded-xl shadow-neon border border-primary/20 overflow-hidden z-[60]">
           {languages.map((lang) => (
             <button
               key={lang.code}
               onClick={() => changeLanguage(lang.code)}
-              className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-gray-50 ${
-                i18n.language === lang.code ? 'bg-primary/5 text-primary' : 'text-gray-600'
+              className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-primary/10 ${
+                i18n.language === lang.code ? 'bg-primary/20 text-primary' : 'text-gray-400'
               }`}
             >
               <span className="text-xl">{lang.flag}</span>
-              <span className="text-sm font-bold">{lang.name}</span>
+              <span className="text-[10px] font-black uppercase tracking-widest mono">{lang.name}</span>
             </button>
           ))}
         </div>

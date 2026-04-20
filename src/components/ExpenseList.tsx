@@ -27,30 +27,27 @@ const ExpenseList: React.FC = () => {
   }, [expenses.length]); // Re-animate on length change
 
   return (
-    <div className="card border-none shadow-xl shadow-gray-200/50 h-full flex flex-col">
+    <div className="card border-white/5 bg-white/5 h-full flex flex-col shadow-neon">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-        <h2 className="text-xl font-black text-gray-900 tracking-tight flex items-center gap-2">
-          {t('list.title')}
-          <span className="text-xs font-bold bg-[#6366f1]/10 text-[#6366f1] px-2 py-1 rounded-lg">
+        <h2 className="text-xl font-black text-white tracking-tighter flex items-center gap-3 uppercase italic">
+          <span className="text-primary">//</span> {t('list.title')}
+          <span className="text-[10px] font-black bg-primary/10 text-primary px-2 py-1 rounded border border-primary/20 mono">
             {expenses.length}
           </span>
         </h2>
         
         <div className="flex items-center gap-3 w-full sm:w-auto">
           <div className="relative flex-1 sm:w-64 group">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-[#6366f1] transition-colors" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600 group-focus-within:text-primary transition-colors" />
             <input 
               type="text" 
               placeholder={t('list.placeholder_search')}
-              className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border-transparent focus:bg-white focus:shadow-md focus:shadow-[#6366f1]/5 rounded-xl text-sm transition-all outline-none"
+              className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/5 focus:bg-white/10 focus:border-primary/50 rounded-xl text-sm transition-all outline-none text-white mono"
             />
           </div>
-          <button className="p-2.5 text-gray-500 hover:text-[#6366f1] hover:bg-[#6366f1]/10 rounded-xl transition-colors">
-            <ListFilter className="w-5 h-5" />
-          </button>
           <button 
             onClick={() => exportToCSV(expenses)}
-            className="flex items-center gap-2 px-4 py-2.5 bg-emerald-50 text-emerald-600 hover:bg-emerald-100 rounded-xl transition-all font-bold text-sm"
+            className="flex items-center gap-2 px-4 py-2.5 bg-primary text-black hover:shadow-neon-strong rounded-xl transition-all font-black text-[10px] uppercase tracking-widest"
           >
             <Download className="w-4 h-4" />
             <span className="hidden md:inline">{t('list.download')}</span>

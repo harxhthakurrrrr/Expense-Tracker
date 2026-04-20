@@ -1,37 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   body {
-    background-color: #fdfdff;
-    @apply text-gray-900 antialiased selection:bg-indigo-100 selection:text-indigo-600;
+    background-color: #050505;
+    @apply text-gray-100 antialiased selection:bg-primary/20 selection:text-primary;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: -0.02em;
+  }
+
+  code, pre, .mono {
+    font-family: 'JetBrains Mono', monospace;
   }
 }
 
 @layer components {
   .card {
-    background-color: #ffffff;
-    box-shadow: 0 20px 50px -12px rgba(99, 102, 241, 0.15);
-    @apply rounded-[2rem] p-6 border border-gray-50/50 backdrop-blur-sm;
+    background-color: #111111;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+    @apply rounded-[1.5rem] p-6 border border-white/5 backdrop-blur-md;
   }
   
   .input-field {
-    @apply w-full px-5 py-3 rounded-2xl border border-gray-100 bg-gray-50/30 focus:bg-white focus:border-[#6366f1] focus:ring-4 focus:ring-[#6366f1]/10 outline-none transition-all duration-300 placeholder:text-gray-400;
+    @apply w-full px-5 py-3 rounded-xl border border-white/5 bg-white/5 focus:bg-white/10 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all duration-300 placeholder:text-gray-600 text-white;
+    font-family: 'Space Grotesk', sans-serif;
   }
   
   .btn-primary {
-    background-image: linear-gradient(to right, #6366f1, #8b5cf6);
-    @apply text-white px-6 py-3 rounded-2xl hover:shadow-lg hover:shadow-indigo-500/25 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 font-bold tracking-tight;
+    background-color: #00ff41;
+    @apply text-black px-6 py-3 rounded-xl hover:shadow-neon hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 font-black tracking-tight uppercase text-xs;
+  }
+
+  .cyber-border {
+    @apply border border-primary/20 hover:border-primary/50 transition-colors;
+  }
+
+  .neon-text {
+    @apply text-primary drop-shadow-[0_0_8px_rgba(0,255,65,0.5)];
   }
 
   .custom-scrollbar::-webkit-scrollbar {
-    width: 6px;
+    width: 4px;
   }
   .custom-scrollbar::-webkit-scrollbar-track {
     @apply bg-transparent;
   }
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-gray-200 rounded-full hover:bg-gray-300 transition-colors;
+    @apply bg-white/10 rounded-full hover:bg-primary/50 transition-colors;
   }
 }
