@@ -6,8 +6,10 @@ import ExpenseList from './components/ExpenseList';
 import PieChart from './components/Charts/PieChart';
 import BarChart from './components/Charts/BarChart';
 import gsap from 'gsap';
+import { useTranslation } from 'react-i18next';
 
 const App: React.FC = () => {
+  const { t } = useTranslation();
   const mainRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -49,7 +51,7 @@ const App: React.FC = () => {
       </main>
       
       <footer className="py-12 text-center opacity-30 dashboard-item">
-        <p className="text-[10px] font-black uppercase tracking-[0.3em]">Built with React & GSAP • 2026</p>
+        <p className="text-[10px] font-black uppercase tracking-[0.3em]">{t('footer')} • 2026</p>
       </footer>
     </div>
   );

@@ -11,10 +11,34 @@ const loadFromStorage = (): Expense[] => {
   }
 }; 
 
+const loadBudgetsFromStorage = (): Record<Category, number> => {
+  try {
+    const data = localStorage.getItem("budgets");
+    return data ? JSON.parse(data) : {
+      "Food": 5000,
+      "Transport": 3000,
+      "Shopping": 10000,
+      "Bills": 5000,
+      "Entertainment": 5000,
+      "Other": 2000
+    };
+  } catch (error) {
+    return {
+      "Food": 5000,
+      "Transport": 3000,
+      "Shopping": 10000,
+      "Bills": 5000,
+      "Entertainment": 5000,
+      "Other": 2000
+    };
+  }
+};
+
 const initialState: ExpenseState = { 
   expenses: loadFromStorage(), 
   filteredCategory: "All", 
   dateRange: { from: "", to: "" }, 
+  budgets: loadBudgetsFromStorage(),
 }; 
 
 const expenseSlice = createSlice({ 
@@ -35,8 +59,12 @@ const expenseSlice = createSlice({
     setDateRange: (state, action: PayloadAction<{ from: string; to: string }>) => { 
       state.dateRange = action.payload; 
     }, 
+    updateBudget: (state, action: PayloadAction<{ category: Category; amount: number }>) => {
+      state.budgets[action.payload.category] = action.payload.amount;
+      localStorage.setItem("budgets", JSON.stringify(state.budgets));
+    }
   }, 
 }); 
 
-export const { addExpense, deleteExpense, setCategory, setDateRange } = expenseSlice.actions; 
+export const { addExpense, deleteExpense, setCategory, setDateRange, updateBudget } = expenseSlice.actions; 
 export default expenseSlice.reducer;

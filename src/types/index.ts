@@ -22,4 +22,5 @@ export interface ExpenseState {
     from: string; 
     to: string; 
   }; 
+  budgets: Record<Category, number>;
 }

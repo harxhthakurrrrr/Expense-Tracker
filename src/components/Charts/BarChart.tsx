@@ -3,8 +3,10 @@ import { BarChart as ReBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Resp
 import { useExpenses } from '../../hooks/useExpenses';
 import { BarChart as BarIcon } from 'lucide-react';
 import { formatDate } from '../../utils/helpers';
+import { useTranslation } from 'react-i18next';
 
 const BarChart: React.FC = () => {
+  const { t } = useTranslation();
   const { filteredExpenses } = useExpenses();
 
   // Group by date
@@ -25,7 +27,7 @@ const BarChart: React.FC = () => {
   if (data.length === 0) return (
     <div className="card border-none bg-surface/50 h-full flex flex-col items-center justify-center text-gray-400 py-12">
       <BarIcon className="w-16 h-16 mb-4 opacity-10" />
-      <p className="font-bold tracking-tight">No data to visualize</p>
+      <p className="font-bold tracking-tight">{t('charts.no_data')}</p>
     </div>
   );
 
@@ -36,10 +38,10 @@ const BarChart: React.FC = () => {
           <div className="p-3 bg-primary/10 rounded-2xl group-hover:bg-primary group-hover:text-white transition-all duration-500">
             <BarIcon className="w-6 h-6" />
           </div>
-          <h2 className="text-xl font-black text-gray-900 tracking-tight">Daily Spending</h2>
+          <h2 className="text-xl font-black text-gray-900 tracking-tight">{t('charts.daily')}</h2>
         </div>
         <div className="text-[10px] font-black uppercase tracking-widest text-primary bg-primary/10 px-3 py-1.5 rounded-full border border-primary/20">
-          Last 7 Days
+          {t('charts.last_7')}
         </div>
       </div>
 

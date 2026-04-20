@@ -1,16 +1,27 @@
 import React, { useEffect, useRef } from 'react';
 import { useExpenses } from '../hooks/useExpenses';
 import { formatCurrency } from '../utils/helpers';
-import { TrendingDown, TrendingUp, Wallet, ArrowUpRight, ArrowDownRight, CreditCard, PieChart as PieChartIcon } from 'lucide-react';
+import { TrendingDown, TrendingUp, Wallet, ArrowUpRight, ArrowDownRight, CreditCard, PieChart as PieChartIcon, AlertCircle } from 'lucide-react';
 import gsap from 'gsap';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store/store';
 
 const SummaryCards: React.FC = () => {
+  const { t } = useTranslation();
   const { summary, expenses } = useExpenses();
+  const budgets = useSelector((state: RootState) => state.expenses.budgets);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const totalBudget = 50000; // Mock budget for now
+  const totalBudget = Object.values(budgets).reduce((acc, curr) => acc + curr, 0);
   const totalSpent = expenses.reduce((acc, curr) => acc + curr.amount, 0);
   const balance = totalBudget - totalSpent;
+
+  // Check if any category exceeded 80%
+  const budgetWarnings = Object.entries(budgets).filter(([category, budget]) => {
+    const spent = summary.byCategory[category] || 0;
+    return spent >= budget * 0.8;
+  });
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -45,7 +56,22 @@ const SummaryCards: React.FC = () => {
   };
 
   return (
-    <div ref={containerRef} className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="space-y-6">
+      {budgetWarnings.length > 0 && (
+        <div className="bg-rose-50 border border-rose-100 p-4 rounded-2xl flex items-center gap-4 animate-pulse">
+          <div className="p-2 bg-rose-500 text-white rounded-xl">
+            <AlertCircle className="w-5 h-5" />
+          </div>
+          <div>
+            <h4 className="text-sm font-black text-rose-900 uppercase tracking-wider">Budget Alert!</h4>
+            <p className="text-xs text-rose-600 font-bold">
+              {budgetWarnings.map(([cat]) => t(`categories.${cat}`)).join(', ')} is near or over budget limit!
+            </p>
+          </div>
+        </div>
+      )}
+
+      <div ref={containerRef} className="grid grid-cols-1 md:grid-cols-3 gap-6">
       {/* Total Balance */}
       <div 
         onMouseEnter={handleHover}
@@ -58,20 +84,22 @@ const SummaryCards: React.FC = () => {
             <Wallet className="w-7 h-7 text-white" />
           </div>
           <span className="text-[10px] font-black uppercase tracking-[0.2em] px-4 py-2 bg-white/20 rounded-full backdrop-blur-xl border border-white/20">
-            Total Balance
+            {t('summary.balance')}
           </span>
         </div>
         <div className="relative z-10">
           <h3 className="text-5xl font-black mb-4 tracking-tighter">{formatCurrency(balance)}</h3>
           <div className="space-y-2">
             <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest opacity-80">
-              <span>Budget Used</span>
+              <span>{t('summary.budget_used')}</span>
               <span>{Math.round((totalSpent / totalBudget) * 100)}%</span>
             </div>
             <div className="h-2 w-full bg-white/20 rounded-full overflow-hidden p-0.5">
               <div 
-                className="h-full bg-white rounded-full transition-all duration-1000 ease-out shadow-[0_0_10px_rgba(255,255,255,0.5)]"
-                style={{ width: `${Math.min((totalSpent / totalBudget) * 100, 100)}%` }}
+                className={`h-full rounded-full transition-all duration-1000 ease-out shadow-[0_0_10px_rgba(255,255,255,0.5)] ${
+                  totalSpent / totalBudget >= 0.9 ? 'bg-rose-400' : 'bg-white'
+                }`}
+                style={{ width: `${totalBudget > 0 ? Math.min((totalSpent / totalBudget) * 100, 100) : 0}%` }}
               ></div>
             </div>
           </div>
@@ -93,11 +121,11 @@ const SummaryCards: React.FC = () => {
               <ArrowUpRight className="w-3.5 h-3.5" />
               2.4%
             </span>
-            <span className="text-[9px] font-bold text-gray-400 mt-2 uppercase tracking-widest">Growth Rate</span>
+            <span className="text-[9px] font-bold text-gray-400 mt-2 uppercase tracking-widest">{t('summary.growth')}</span>
           </div>
         </div>
         <h3 className="text-4xl font-black text-gray-900 mb-2 tracking-tighter group-hover:text-[#ec4899] transition-colors">{formatCurrency(totalSpent)}</h3>
-        <p className="text-gray-400 text-xs font-bold uppercase tracking-widest">Total Expenses</p>
+        <p className="text-gray-400 text-xs font-bold uppercase tracking-widest">{t('summary.expenses')}</p>
       </div>
 
       {/* Filtered Total */}
@@ -115,14 +143,15 @@ const SummaryCards: React.FC = () => {
               <ArrowDownRight className="w-3.5 h-3.5" />
               1.2%
             </span>
-            <span className="text-[9px] font-bold text-gray-400 mt-2 uppercase tracking-widest">Trend Analysis</span>
+            <span className="text-[9px] font-bold text-gray-400 mt-2 uppercase tracking-widest">{t('summary.trend')}</span>
           </div>
         </div>
         <h3 className="text-4xl font-black text-gray-900 mb-2 tracking-tighter group-hover:text-[#6366f1] transition-colors">{formatCurrency(summary.total)}</h3>
-        <p className="text-gray-400 text-xs font-bold uppercase tracking-widest">Filtered Balance</p>
+        <p className="text-gray-400 text-xs font-bold uppercase tracking-widest">{t('summary.filtered')}</p>
       </div>
     </div>
-  );
+  </div>
+);
 };
 
 export default SummaryCards;

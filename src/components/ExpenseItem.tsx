@@ -5,6 +5,7 @@ import { Expense } from '../types';
 import { formatCurrency } from '../utils/helpers';
 import { Trash2, ShoppingBag, Utensils, Truck, Receipt, Play, MoreHorizontal, Calendar } from 'lucide-react';
 import gsap from 'gsap';
+import { useTranslation } from 'react-i18next';
 
 interface ExpenseItemProps {
   expense: Expense;
@@ -23,6 +24,7 @@ const CategoryIcon = ({ category }: { category: string }) => {
 };
 
 const ExpenseItem: React.FC<ExpenseItemProps> = ({ expense }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const itemRef = React.useRef<HTMLDivElement>(null);
 
@@ -49,7 +51,7 @@ const ExpenseItem: React.FC<ExpenseItemProps> = ({ expense }) => {
           <h4 className="font-bold text-gray-900 group-hover:text-[#6366f1] transition-colors">{expense.title}</h4>
           <div className="flex items-center gap-3 mt-1">
             <span className="text-[10px] font-black uppercase tracking-widest text-gray-400 bg-gray-100 px-2 py-0.5 rounded-md">
-              {expense.category}
+              {t(`categories.${expense.category}`)}
             </span>
             <span className="flex items-center gap-1 text-[11px] font-medium text-gray-400">
               <Calendar className="w-3 h-3" />

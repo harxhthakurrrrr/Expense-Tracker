@@ -2,21 +2,23 @@ import React from 'react';
 import { PieChart as RePieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { useExpenses } from '../../hooks/useExpenses';
 import { PieChart as PieIcon } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const COLORS = ['#6366f1', '#ec4899', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444'];
 
 const PieChart: React.FC = () => {
+  const { t } = useTranslation();
   const { summary } = useExpenses();
 
   const data = Object.entries(summary.byCategory).map(([name, value]) => ({
-    name,
+    name: t(`categories.${name}`),
     value,
   }));
 
   if (data.length === 0) return (
     <div className="card border-none bg-surface/50 h-full flex flex-col items-center justify-center text-gray-400 py-12">
       <PieIcon className="w-16 h-16 mb-4 opacity-10" />
-      <p className="font-bold tracking-tight">No data to visualize</p>
+      <p className="font-bold tracking-tight">{t('charts.no_data')}</p>
     </div>
   );
 
@@ -27,10 +29,10 @@ const PieChart: React.FC = () => {
           <div className="p-3 bg-secondary/10 text-secondary rounded-2xl group-hover:bg-secondary group-hover:text-white transition-all duration-500">
             <PieIcon className="w-6 h-6" />
           </div>
-          <h2 className="text-xl font-black text-gray-900 tracking-tight">Category Mix</h2>
+          <h2 className="text-xl font-black text-gray-900 tracking-tight">{t('charts.mix')}</h2>
         </div>
         <div className="text-[10px] font-black uppercase tracking-widest text-secondary bg-secondary/10 px-3 py-1.5 rounded-full border border-secondary/20">
-          Distribution
+          {t('charts.distribution')}
         </div>
       </div>
 
