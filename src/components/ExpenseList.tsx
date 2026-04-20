@@ -1,84 +1,68 @@
 import React, { useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../store/store';
-import { setCategory } from '../store/expenseSlice';
 import { useExpenses } from '../hooks/useExpenses';
 import ExpenseItem from './ExpenseItem';
-import { Category } from '../types';
-import { Filter, Inbox } from 'lucide-react';
+import { ListFilter, Search } from 'lucide-react';
 import gsap from 'gsap';
 
-const CATEGORIES: (Category | "All")[] = ["All", "Food", "Transport", "Shopping", "Bills", "Entertainment", "Other"];
-
 const ExpenseList: React.FC = () => {
-  const dispatch = useDispatch();
-  const { filteredExpenses, filteredCategory } = useExpenses();
+  const { expenses } = useExpenses();
   const listRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (listRef.current) {
-      gsap.fromTo(
-        listRef.current.children,
-        { 
-          y: 20, 
-          opacity: 0 
-        },
-        { 
-          y: 0, 
-          opacity: 1, 
-          stagger: 0.1, 
-          duration: 0.5, 
-          ease: 'power3.out',
-          overwrite: 'auto'
-        }
-      );
+    if (listRef.current && expenses.length > 0) {
+      const ctx = gsap.context(() => {
+        gsap.from('.expense-item-anim', {
+          x: -20,
+          opacity: 0,
+          duration: 0.5,
+          stagger: 0.1,
+          ease: 'power2.out',
+        });
+      }, listRef);
+      return () => ctx.revert();
     }
-  }, [filteredExpenses.length, filteredCategory]);
+  }, [expenses.length]); // Re-animate on length change
 
   return (
-    <div className="card h-full">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-        <div className="flex items-center gap-2">
-          <div className="p-2 bg-primary/10 rounded-lg">
-            <Filter className="text-primary w-5 h-5" />
-          </div>
-          <h2 className="text-lg font-bold text-gray-800">Recent Transactions</h2>
-        </div>
+    <div className="card border-none shadow-xl shadow-gray-200/50 h-full flex flex-col">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+        <h2 className="text-xl font-black text-gray-900 tracking-tight flex items-center gap-2">
+          Recent Expenses
+          <span className="text-xs font-bold bg-[#6366f1]/10 text-[#6366f1] px-2 py-1 rounded-lg">
+            {expenses.length}
+          </span>
+        </h2>
         
-        <div className="flex gap-2 overflow-x-auto pb-2 sm:pb-0 scrollbar-hide">
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => dispatch(setCategory(cat))}
-              className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all border ${
-                filteredCategory === cat
-                  ? 'bg-primary border-primary text-white shadow-sm'
-                  : 'bg-white border-gray-200 text-gray-500 hover:border-primary/50'
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
+        <div className="flex items-center gap-3 w-full sm:w-auto">
+          <div className="relative flex-1 sm:w-64 group">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-[#6366f1] transition-colors" />
+            <input 
+              type="text" 
+              placeholder="Search expenses..." 
+              className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border-transparent focus:bg-white focus:shadow-md focus:shadow-[#6366f1]/5 rounded-xl text-sm transition-all outline-none"
+            />
+          </div>
+          <button className="p-2.5 text-gray-500 hover:text-[#6366f1] hover:bg-[#6366f1]/10 rounded-xl transition-colors">
+            <ListFilter className="w-5 h-5" />
+          </button>
         </div>
       </div>
 
-      <div ref={listRef} className="space-y-1">
-        {filteredExpenses.length > 0 ? (
-          filteredExpenses.map((expense, index) => (
-            <ExpenseItem 
-              key={expense.id} 
-              expense={expense} 
-              index={index} 
-            />
-          ))
-        ) : (
-          <div className="flex flex-col items-center justify-center py-12 text-gray-400">
-            <div className="p-4 bg-gray-50 rounded-full mb-4">
-              <Inbox className="w-10 h-10" />
+      <div ref={listRef} className="space-y-3 overflow-y-auto pr-2 custom-scrollbar flex-1">
+        {expenses.length === 0 ? (
+          <div className="text-center py-12 flex flex-col items-center justify-center h-full">
+            <div className="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mb-4">
+              <Search className="w-10 h-10 text-gray-300" />
             </div>
-            <p className="font-medium">No expenses found</p>
-            <p className="text-sm">Try changing filters or adding a new expense</p>
+            <p className="text-gray-500 font-medium">No expenses found.</p>
+            <p className="text-sm text-gray-400 mt-1">Add your first expense to get started!</p>
           </div>
+        ) : (
+          expenses.map((expense) => (
+            <div key={expense.id} className="expense-item-anim">
+              <ExpenseItem expense={expense} />
+            </div>
+          ))
         )}
       </div>
     </div>
