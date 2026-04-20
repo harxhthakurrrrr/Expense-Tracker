@@ -35,7 +35,11 @@
   
   .btn-primary {
     background-color: #00ff41;
-    @apply text-black px-6 py-3 rounded-xl hover:shadow-neon hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 font-black tracking-tight uppercase text-xs;
+    @apply text-black px-6 py-3 rounded-xl hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 font-black tracking-tight uppercase text-xs;
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 0 15px rgba(0, 255, 65, 0.5), 0 0 30px rgba(0, 255, 65, 0.3);
   }
 
   .cyber-border {
