@@ -8,6 +8,7 @@ const Navbar: React.FC = () => {
   const { t } = useTranslation();
   const navRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
+  const iconRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -16,6 +17,15 @@ const Navbar: React.FC = () => {
         opacity: 0,
         duration: 1,
         ease: 'power4.out',
+      });
+
+      // Logo floating animation
+      gsap.to(iconRef.current, {
+        y: -5,
+        duration: 2,
+        repeat: -1,
+        yoyo: true,
+        ease: 'power1.inOut'
       });
     }, navRef);
     return () => ctx.revert();
@@ -27,6 +37,11 @@ const Navbar: React.FC = () => {
       duration: 0.3,
       ease: 'power2.out',
     });
+    gsap.to(iconRef.current, {
+      rotate: 360,
+      duration: 0.8,
+      ease: 'back.out(1.7)'
+    });
   };
 
   const handleLogoLeave = () => {
@@ -34,6 +49,10 @@ const Navbar: React.FC = () => {
       scale: 1,
       duration: 0.3,
       ease: 'power2.in',
+    });
+    gsap.to(iconRef.current, {
+      rotate: 0,
+      duration: 0.5,
     });
   };
 
@@ -49,8 +68,12 @@ const Navbar: React.FC = () => {
           onMouseLeave={handleLogoLeave}
           className="flex items-center gap-3 cursor-pointer group"
         >
-          <div className="p-2.5 bg-gradient-to-br from-[#6366f1] to-[#8b5cf6] rounded-2xl shadow-lg shadow-indigo-500/30 group-hover:rotate-12 transition-transform duration-500">
-            <Wallet className="text-white w-6 h-6" />
+          <div className="relative">
+            <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full group-hover:bg-primary/40 transition-colors"></div>
+            <div className="relative p-2.5 bg-gradient-to-br from-[#6366f1] to-[#8b5cf6] rounded-2xl shadow-lg shadow-indigo-500/30 overflow-hidden">
+              <Wallet ref={iconRef} className="text-white w-6 h-6 relative z-10" />
+              <div className="absolute -bottom-2 -right-2 w-6 h-6 bg-white/20 rounded-full blur-md"></div>
+            </div>
           </div>
           <h1 className="text-2xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-[#6366f1] via-[#8b5cf6] to-[#ec4899]">
             {t('navbar.title')}<span className="text-gray-900">{t('navbar.tracker')}</span>

@@ -41,3 +41,28 @@ Reply with ONLY the category name, nothing else.`,
     return "Other"; 
   } 
 }; 
+
+export const getAiInsights = async (expenses: any[]): Promise<string> => {
+  if (expenses.length < 3) return "Add more expenses to get AI insights! 📊";
+
+  try {
+    const expenseData = expenses.map(e => `${e.title}: ${e.amount} (${e.category})`).join(", ");
+    const response = await client.messages.create({
+      model: "claude-3-5-sonnet-20240620",
+      max_tokens: 150,
+      messages: [
+        {
+          role: "user",
+          content: `Analyze these expenses and give 2 short, punchy financial tips in Hindi (written in English script/Hinglish). Keep it under 40 words total.
+          Expenses: ${expenseData}`,
+        },
+      ],
+    });
+
+    const content = response.content[0];
+    return content.type === "text" ? content.text.trim() : "Keep tracking to save more! 🚀";
+  } catch (error) {
+    console.error("AI Insights failed:", error);
+    return "Spending patterns look good! Keep it up. 👍";
+  }
+};

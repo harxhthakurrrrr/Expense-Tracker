@@ -1,17 +1,32 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useExpenses } from '../hooks/useExpenses';
 import { formatCurrency } from '../utils/helpers';
-import { TrendingDown, TrendingUp, Wallet, ArrowUpRight, ArrowDownRight, CreditCard, PieChart as PieChartIcon, AlertCircle } from 'lucide-react';
+import { TrendingDown, TrendingUp, Wallet, ArrowUpRight, ArrowDownRight, CreditCard, PieChart as PieChartIcon, AlertCircle, Sparkles, BrainCircuit } from 'lucide-react';
 import gsap from 'gsap';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
+import { getAiInsights } from '../utils/aiCategorize';
 
 const SummaryCards: React.FC = () => {
   const { t } = useTranslation();
   const { summary, expenses } = useExpenses();
   const budgets = useSelector((state: RootState) => state.expenses.budgets);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [aiInsights, setAiInsights] = useState<string>("");
+  const [loadingInsights, setLoadingInsights] = useState(false);
+
+  useEffect(() => {
+    const fetchInsights = async () => {
+      if (expenses.length >= 3) {
+        setLoadingInsights(true);
+        const insights = await getAiInsights(expenses);
+        setAiInsights(insights);
+        setLoadingInsights(false);
+      }
+    };
+    fetchInsights();
+  }, [expenses.length]);
 
   const totalBudget = Object.values(budgets).reduce((acc, curr) => acc + curr, 0);
   const totalSpent = expenses.reduce((acc, curr) => acc + curr.amount, 0);
@@ -57,19 +72,42 @@ const SummaryCards: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {budgetWarnings.length > 0 && (
-        <div className="bg-rose-50 border border-rose-100 p-4 rounded-2xl flex items-center gap-4 animate-pulse">
-          <div className="p-2 bg-rose-500 text-white rounded-xl">
-            <AlertCircle className="w-5 h-5" />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {budgetWarnings.length > 0 && (
+          <div className="bg-rose-50 border border-rose-100 p-5 rounded-3xl flex items-center gap-4 shadow-sm">
+            <div className="p-3 bg-rose-500 text-white rounded-2xl">
+              <AlertCircle className="w-6 h-6" />
+            </div>
+            <div>
+              <h4 className="text-sm font-black text-rose-900 uppercase tracking-wider">Budget Alert!</h4>
+              <p className="text-xs text-rose-600 font-bold">
+                {budgetWarnings.map(([cat]) => t(`categories.${cat}`)).join(', ')} limit reached!
+              </p>
+            </div>
           </div>
-          <div>
-            <h4 className="text-sm font-black text-rose-900 uppercase tracking-wider">Budget Alert!</h4>
-            <p className="text-xs text-rose-600 font-bold">
-              {budgetWarnings.map(([cat]) => t(`categories.${cat}`)).join(', ')} is near or over budget limit!
+        )}
+
+        <div className="bg-[#6366f1]/5 border border-[#6366f1]/10 p-5 rounded-3xl flex items-center gap-4 shadow-sm relative overflow-hidden group">
+          <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:scale-125 transition-transform duration-500">
+            <Sparkles className="w-12 h-12 text-[#6366f1]" />
+          </div>
+          <div className="p-3 bg-[#6366f1] text-white rounded-2xl shadow-lg shadow-indigo-500/30">
+            <BrainCircuit className="w-6 h-6" />
+          </div>
+          <div className="flex-1">
+            <h4 className="text-[10px] font-black text-[#6366f1] uppercase tracking-[0.2em] mb-1">AI Financial Insights</h4>
+            <p className="text-xs text-gray-700 font-bold leading-relaxed italic">
+              {loadingInsights ? (
+                <span className="flex items-center gap-2">
+                  <span className="w-1 h-1 bg-[#6366f1] rounded-full animate-bounce"></span>
+                  <span className="w-1 h-1 bg-[#6366f1] rounded-full animate-bounce [animation-delay:0.2s]"></span>
+                  <span className="w-1 h-1 bg-[#6366f1] rounded-full animate-bounce [animation-delay:0.4s]"></span>
+                </span>
+              ) : aiInsights || "Tracking shuru karo, fir insights milegi! 🚀"}
             </p>
           </div>
         </div>
-      )}
+      </div>
 
       <div ref={containerRef} className="grid grid-cols-1 md:grid-cols-3 gap-6">
       {/* Total Balance */}
